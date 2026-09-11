@@ -1,24 +1,32 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
-# Schema for creating a new task
+# -------------------------
+# Task Creation Schema
+# -------------------------
+
 class TaskCreate(BaseModel):
-    title: str
+    title: str = Field(min_length=1)
     description: str = ""
-    priority: int = 1
+    priority: int = Field(default=1, ge=1, le=5)
     due_date: str = ""
 
 
-# Schema for partially updating an existing task
-# All fields are optional because PATCH updates only the fields provided
+# -------------------------
+# Task Update Schema
+# -------------------------
+
 class TaskUpdate(BaseModel):
-    title: str | None = None
+    title: str | None = Field(default=None, min_length=1)
     description: str | None = None
-    priority: int | None = None
+    priority: int | None = Field(default=None, ge=1, le=5)
     due_date: str | None = None
 
 
-# Schema for returning task data
+# -------------------------
+# Task Response Schema
+# -------------------------
+
 class Task(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -30,7 +38,10 @@ class Task(BaseModel):
     done: bool = False
 
 
-# Schema for registering a new user
+# -------------------------
+# User Registration Schema
+# -------------------------
+
 class UserCreate(BaseModel):
     email: str
-    password: str
+    password: str = Field(min_length=8)

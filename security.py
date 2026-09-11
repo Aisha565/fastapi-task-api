@@ -1,5 +1,6 @@
 import bcrypt
 from jose import jwt
+from datetime import datetime, timedelta, timezone
 
 
 # Secret key used to create and verify JWT tokens
@@ -9,9 +10,9 @@ SECRET_KEY = "my-super-secret-key"
 ALGORITHM = "HS256"
 
 
-# -------------------------------------------------
+# -------------------------
 # Password Hashing
-# -------------------------------------------------
+# -------------------------
 
 def hash_password(password: str) -> str:
     """
@@ -27,9 +28,9 @@ def hash_password(password: str) -> str:
     return hashed_password.decode()
 
 
-# -------------------------------------------------
+# -------------------------
 # Password Verification
-# -------------------------------------------------
+# -------------------------
 
 def verify_password(password: str, hashed_password: str) -> bool:
     """
@@ -43,20 +44,22 @@ def verify_password(password: str, hashed_password: str) -> bool:
     )
 
 
-# -------------------------------------------------
+# -------------------------
 # JWT Access Token
-# -------------------------------------------------
+# -------------------------
 
 def create_access_token(email: str) -> str:
     """
     Create a JWT access token for an authenticated user.
 
-    The user's email is stored in the 'sub' (subject)
-    field of the token.
+    The token expires after 24 hours.
     """
 
+    expire = datetime.now(timezone.utc) + timedelta(hours=24)
+
     payload = {
-        "sub": email
+        "sub": email,
+        "exp": expire
     }
 
     token = jwt.encode(
@@ -67,8 +70,18 @@ def create_access_token(email: str) -> str:
 
     return token
 
-# Decode a JWT token and return the user's email
+
+# -------------------------
+# Decode JWT Access Token
+# -------------------------
+
 def decode_access_token(token: str) -> str | None:
+    """
+    Decode the JWT token and return the user's email.
+
+    An expired or invalid token returns None.
+    """
+
     try:
         payload = jwt.decode(
             token,
