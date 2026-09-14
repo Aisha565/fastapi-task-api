@@ -7,11 +7,14 @@ A REST API built with **FastAPI** for managing tasks with **SQLite**, **SQLAlche
 * User registration
 * Secure password hashing with bcrypt
 * User login with JWT authentication
+* JWT access tokens with 24-hour expiration
 * Protected task endpoints
 * Create, read, update, partially update, and delete tasks
 * User-specific task ownership
 * SQLite database with SQLAlchemy ORM
 * Request and response validation with Pydantic
+* Input validation for task title, priority, and password
+* Automated API testing with pytest
 * Interactive API documentation with Swagger UI
 
 ## Technologies Used
@@ -24,23 +27,30 @@ A REST API built with **FastAPI** for managing tasks with **SQLite**, **SQLAlche
 * JWT
 * bcrypt
 * Uvicorn
+* pytest
 
 ## Project Structure
 
 ```text
 task-api/
+
 │
 ├── main.py
 ├── database.py
 ├── schemas.py
 ├── security.py
 ├── requirements.txt
+├── README.md
 │
-└── routers/
+├── routers/
+│   ├── __init__.py
+│   ├── tasks.py
+│   ├── users.py
+│   └── auth.py
+│
+└── tests/
     ├── __init__.py
-    ├── tasks.py
-    ├── users.py
-    └── auth.py
+    └── test_api.py
 ```
 
 ## Setup
@@ -104,6 +114,8 @@ The token is sent using:
 Authorization: Bearer <access_token>
 ```
 
+JWT access tokens expire after **24 hours**.
+
 ## Main Endpoints
 
 ### Users
@@ -128,6 +140,17 @@ Authorization: Bearer <access_token>
 | PUT    | `/tasks/{task_id}` | Update a task           |
 | PATCH  | `/tasks/{task_id}` | Partially update a task |
 | DELETE | `/tasks/{task_id}` | Delete a task           |
+
+## Validation
+
+The API uses **Pydantic** for request validation.
+
+Examples:
+
+* Task title cannot be empty.
+* Task priority must be between **1 and 5**.
+* User passwords must contain at least **8 characters**.
+* Invalid input returns a `422 Unprocessable Entity` response.
 
 ## User Ownership
 
@@ -164,8 +187,36 @@ The database file `tasks.db` is created automatically when the application start
 * Passwords are never stored as plain text.
 * Passwords are hashed using bcrypt.
 * JWT tokens are used for authentication.
+* JWT tokens expire after 24 hours.
 * Protected endpoints verify the JWT before allowing access.
 * Task ownership is checked using the authenticated user's ID.
+
+## Testing
+
+The project includes **8 automated API tests** using pytest.
+
+Tests cover:
+
+* User registration
+* User login
+* Task creation
+* Getting a task
+* Updating a task
+* Deleting a task
+* Request validation
+* Preventing one user from accessing another user's task
+
+Run the tests with:
+
+```powershell
+pytest -v
+```
+
+Expected result:
+
+```text
+8 passed
+```
 
 ## Learning Goals
 
@@ -180,5 +231,7 @@ This project was built to practice:
 * Dependency Injection
 * Password hashing
 * JWT authentication
+* JWT expiration
 * User authorization and resource ownership
+* Automated API testing with pytest
 * API testing with Swagger UI
