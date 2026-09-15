@@ -29,7 +29,9 @@ def home():
 # -------------------------
 # Health Check
 # -------------------------
-
 @app.get("/health")
 def check_health():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "message": "Task API is healthy"
+    }
