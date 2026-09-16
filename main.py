@@ -32,4 +32,4 @@ def home():
 
 @app.get("/health")
 def check_health():
-    return {"status": "ok"}
+    return {"status": "healthy"}
