@@ -33,5 +33,5 @@ def home():
 def check_health():
     return {
         "status": "ok",
-        "message": "Task API is healthy"
+        "message": "Task API is ready"
     }
