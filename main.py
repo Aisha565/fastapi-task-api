@@ -23,7 +23,7 @@ app.include_router(auth.router)
 
 @app.get("/")
 def home():
-    return {"message": "FastAPI is working!"}
+    return {"message": "Task API is ready"}
 
 
 # -------------------------
@@ -32,6 +32,6 @@ def home():
 @app.get("/health")
 def check_health():
     return {
-        "status": "ok",
-         "message": "Task API is running"
+        "status": "healthy",
+        "message": "Task API is running"
     }
