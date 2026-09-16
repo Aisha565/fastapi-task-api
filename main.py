@@ -23,7 +23,7 @@ app.include_router(auth.router)
 
 @app.get("/")
 def home():
-    return {"message": "Task API is production ready"}
+    return {"message": "Task API is ready"}
 
 
 # -------------------------
