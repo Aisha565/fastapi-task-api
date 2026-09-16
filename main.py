@@ -23,7 +23,7 @@ app.include_router(auth.router)
 
 @app.get("/")
 def home():
-    return {"message": "FastAPI is working!"}
+    return {"message": "Task API is running"}
 
 
 # -------------------------
