@@ -1,12 +1,16 @@
+import os
 from sqlalchemy import create_engine, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
 
-# SQLite database connection
-engine = create_engine(
-    "sqlite:///tasks.db",
-    connect_args={"check_same_thread": False}
+# PostgreSQL database connection
+DATABASE_URL = (
+    f"postgresql+psycopg://"
+    f"{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}"
+    f"@db:5432/{os.getenv('POSTGRES_DB')}"
 )
+
+engine = create_engine(DATABASE_URL)
 
 
 # Creates database sessions
@@ -59,3 +63,4 @@ def get_db():
     finally:
         # Always close the session after the request
         db.close()
+
